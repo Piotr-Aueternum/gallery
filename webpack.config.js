@@ -1,0 +1,46 @@
+const path = require('path');
+const webpack = require('webpack');
+
+module.exports = {
+  entry: path.join(__dirname, 'src', 'index.js'),
+  output: {
+    path: path.join(__dirname, 'src', 'static', 'js'),
+    filename: 'bundle.js',
+  },
+  module: {
+    rules: [{
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]',
+      ],
+    },
+    {
+      test: /\.js$/,
+      use: [{
+        loader: 'babel-loader',
+      },
+        'eslint-loader',
+      ],
+    }],
+  },
+  resolve: {
+    extensions: ['.js'],
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        BROWSER: true,
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
+      },
+    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   compress: { warnings: false },
+    //   mangle: true,
+    //   sourcemap: false,
+    //   beautify: false,
+    //   dead_code: true,
+    // }),
+  ],
+};
+
