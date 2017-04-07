@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import test from './test';
+import App from './components/App';
 
 window.addEventListener('load', () => {
-  ReactDOM.render(<div>{test()}</div>, document.getElementById('app'));
+  ReactDOM.render(<App />, document.getElementById('app'));
 });
