@@ -1,3 +1,10 @@
 .App {
   color: red;
 }
+.imagesList {
+  display: flex;
+  flex-wrap: wrap;
+}
+.image {
+  width: 200px;
+}

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 173);
+/******/ 	return __webpack_require__(__webpack_require__.s = 174);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -9156,23 +9156,136 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = __webpack_require__(47);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _App = __webpack_require__(176);
+var _App = __webpack_require__(177);
 
 var _App2 = _interopRequireDefault(_App);
 
+var _httpGet = __webpack_require__(173);
+
+var _httpGet2 = _interopRequireDefault(_httpGet);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = function () {
-  return _react2.default.createElement(
-    'div',
-    { className: _App2.default.App },
-    'Hello world'
-  );
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var App = function (_React$Component) {
+  _inherits(App, _React$Component);
+
+  function App(props) {
+    _classCallCheck(this, App);
+
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
+
+    _this.getData = _this.getData.bind(_this);
+    _this.updatePagination = _this.updatePagination.bind(_this);
+    _this.state = { data: null, page: 0 };
+    return _this;
+  }
+
+  _createClass(App, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this.getData();
+    }
+  }, {
+    key: 'getData',
+    value: function getData() {
+      var _this2 = this;
+
+      (0, _httpGet2.default)('https://api.imgur.com/3/gallery/search/' + this.state.page + '?q=polandball', function (res) {
+        var data = JSON.parse(res).data;
+        _this2.setState({ data: data });
+        console.log(_this2.state);
+      });
+    }
+  }, {
+    key: 'updatePagination',
+    value: function updatePagination(val) {
+      switch (val) {
+        case 'start':
+          {
+            this.setState({ page: this.state.page === 0 ? this.state.page : this.state.page - 1 });
+            break;
+          }
+        case 'end':
+          {
+            this.setState({ page: this.state.page + 1 });
+            break;
+          }
+        default:
+          {
+            this.setState({ page: this.state.page });
+            break;
+          }
+      }
+      this.getData();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      if (this.state.data === null) {
+        return _react2.default.createElement(
+          'div',
+          null,
+          'Loading...'
+        );
+      }
+      return _react2.default.createElement(
+        'div',
+        { className: _App2.default.App },
+        _react2.default.createElement(
+          'button',
+          { onClick: function onClick() {
+              return _this3.updatePagination('start');
+            } },
+          'Prev'
+        ),
+        _react2.default.createElement(
+          'button',
+          { onClick: function onClick() {
+              return _this3.updatePagination('end');
+            } },
+          'Next'
+        ),
+        _react2.default.createElement(
+          'span',
+          null,
+          this.state.page
+        ),
+        _react2.default.createElement(
+          'ul',
+          { className: _App2.default.imagesList },
+          this.state.data.map(function (item) {
+            return _react2.default.createElement(
+              'li',
+              null,
+              _react2.default.createElement('img', { className: _App2.default.image, src: item.link, alt: item.title })
+            );
+          })
+        )
+      );
+    }
+  }]);
+
+  return App;
+}(_react2.default.Component);
+
+// export default () => <div className={styles.App}>Hello world</div>;
+
+
+exports.default = App;
 
 /***/ }),
 /* 79 */
@@ -22624,6 +22737,29 @@ module.exports = g;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (theUrl, callback) {
+  var request = new XMLHttpRequest();
+  request.onreadystatechange = function () {
+    if (request.readyState === 4 && request.status === 200) {
+      callback(request.responseText);
+    }
+  };
+  request.open('GET', theUrl, true);
+  request.setRequestHeader('Authorization', 'Client-ID 33d4059b86ff060');
+  request.send(null);
+};
+
+/***/ }),
+/* 174 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
 var _react = __webpack_require__(47);
 
 var _react2 = _interopRequireDefault(_react);
@@ -22643,7 +22779,7 @@ window.addEventListener('load', function () {
 });
 
 /***/ }),
-/* 174 */
+/* 175 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(81)(undefined);
@@ -22651,15 +22787,17 @@ exports = module.exports = __webpack_require__(81)(undefined);
 
 
 // module
-exports.push([module.i, ".App__App___2mQ44 {\n  color: red;\n}", ""]);
+exports.push([module.i, ".App__App___2mQ44 {\n  color: red;\n}\n.App__imagesList___1AfGl {\n  display: flex;\n  flex-wrap: wrap;\n}\n.App__image___14g-d {\n  width: 200px;\n}", ""]);
 
 // exports
 exports.locals = {
-	"App": "App__App___2mQ44"
+	"App": "App__App___2mQ44",
+	"imagesList": "App__imagesList___1AfGl",
+	"image": "App__image___14g-d"
 };
 
 /***/ }),
-/* 175 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -22955,16 +23093,16 @@ function updateLink(linkElement, options, obj) {
 
 
 /***/ }),
-/* 176 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(174);
+var content = __webpack_require__(175);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(175)(content, {});
+var update = __webpack_require__(176)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
