@@ -9178,6 +9178,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var START = Symbol('START');
+var END = Symbol('END');
+
 var App = function (_React$Component) {
   _inherits(App, _React$Component);
 
@@ -9187,8 +9190,9 @@ var App = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
     _this.getData = _this.getData.bind(_this);
+    _this.search = _this.search.bind(_this);
     _this.updatePagination = _this.updatePagination.bind(_this);
-    _this.state = { data: null, page: 0 };
+    _this.state = { data: [], page: 0, tags: 'polandball', query: '' };
     return _this;
   }
 
@@ -9202,22 +9206,23 @@ var App = function (_React$Component) {
     value: function getData() {
       var _this2 = this;
 
-      (0, _httpGet2.default)('https://api.imgur.com/3/gallery/search/' + this.state.page + '?q=polandball', function (res) {
+      (0, _httpGet2.default)('https://api.imgur.com/3/gallery/search/' + this.state.page + '?q=' + this.state.tags + ' ' + this.state.query + '&q_type=png', function (res) {
         var data = JSON.parse(res).data;
         _this2.setState({ data: data });
-        console.log(_this2.state);
       });
     }
   }, {
     key: 'updatePagination',
     value: function updatePagination(val) {
+      var _this3 = this;
+
       switch (val) {
-        case 'start':
+        case START:
           {
             this.setState({ page: this.state.page === 0 ? this.state.page : this.state.page - 1 });
             break;
           }
-        case 'end':
+        case END:
           {
             this.setState({ page: this.state.page + 1 });
             break;
@@ -9225,15 +9230,32 @@ var App = function (_React$Component) {
         default:
           {
             this.setState({ page: this.state.page });
-            break;
           }
       }
-      this.getData();
+      setTimeout(function () {
+        _this3.getData();
+      });
+    }
+  }, {
+    key: 'search',
+    value: function search(e) {
+      var _this4 = this;
+
+      var val = e.target.value;
+      if (e.target.value !== '') {
+        var queryValue = 'AND ' + val.replace(/( )([A-Za-z])/g, '$1AND $2');
+        this.setState({ query: queryValue });
+      } else {
+        this.setState({ query: val });
+      }
+      setTimeout(function () {
+        _this4.getData();
+      });
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this5 = this;
 
       if (this.state.data === null) {
         return _react2.default.createElement(
@@ -9242,20 +9264,28 @@ var App = function (_React$Component) {
           'Loading...'
         );
       }
+      var rows = [];
+      for (var i = 0; i <= 8; i += 1) {
+        var item = this.state.data[i];
+        if (item === undefined) {
+          break;
+        }
+        rows.push(item);
+      }
       return _react2.default.createElement(
         'div',
         { className: _App2.default.App },
         _react2.default.createElement(
           'button',
           { onClick: function onClick() {
-              return _this3.updatePagination('start');
+              return _this5.updatePagination(START);
             } },
           'Prev'
         ),
         _react2.default.createElement(
           'button',
           { onClick: function onClick() {
-              return _this3.updatePagination('end');
+              return _this5.updatePagination(END);
             } },
           'Next'
         ),
@@ -9265,12 +9295,22 @@ var App = function (_React$Component) {
           this.state.page
         ),
         _react2.default.createElement(
+          'div',
+          null,
+          _react2.default.createElement(
+            'label',
+            { htmlFor: 'search' },
+            'Search'
+          ),
+          _react2.default.createElement('input', { id: 'search', type: 'text', value: this.state.value, onChange: this.search })
+        ),
+        _react2.default.createElement(
           'ul',
           { className: _App2.default.imagesList },
-          this.state.data.map(function (item) {
+          rows.map(function (item) {
             return _react2.default.createElement(
               'li',
-              null,
+              { className: _App2.default.imageListItem },
               _react2.default.createElement('img', { className: _App2.default.image, src: item.link, alt: item.title })
             );
           })
@@ -9281,9 +9321,6 @@ var App = function (_React$Component) {
 
   return App;
 }(_react2.default.Component);
-
-// export default () => <div className={styles.App}>Hello world</div>;
-
 
 exports.default = App;
 
@@ -22787,12 +22824,13 @@ exports = module.exports = __webpack_require__(81)(undefined);
 
 
 // module
-exports.push([module.i, ".App__App___2mQ44 {\n  color: red;\n}\n.App__imagesList___1AfGl {\n  display: flex;\n  flex-wrap: wrap;\n}\n.App__image___14g-d {\n  width: 200px;\n}", ""]);
+exports.push([module.i, ".App__App___2mQ44 {\n  background-color: #eee;\n  width: 900px;\n  margin: 0 auto;\n}\n.App__imagesList___1AfGl {\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n}\n.App__imageListItem___3dK1v {\n  margin-bottom: 20px;\n}\n.App__image___14g-d {\n  width: 800px;\n}", ""]);
 
 // exports
 exports.locals = {
 	"App": "App__App___2mQ44",
 	"imagesList": "App__imagesList___1AfGl",
+	"imageListItem": "App__imageListItem___3dK1v",
 	"image": "App__image___14g-d"
 };
 
