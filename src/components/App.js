@@ -11,7 +11,8 @@ export default class App extends React.Component {
     this.getData = this.getData.bind(this);
     this.search = this.search.bind(this);
     this.updatePagination = this.updatePagination.bind(this);
-    this.state = { data: [], page: 0, tags: 'polandball', query: '' };
+    this.updateImages = this.updateImages.bind(this);
+    this.state = { data: [], page: 0, imagesIndex: 1, amountPerView: 8, tags: 'polandball', query: '' };
   }
   componentDidMount() {
     this.getData();
@@ -22,18 +23,38 @@ export default class App extends React.Component {
       this.setState({ data });
     });
   }
-  updatePagination(val) {
+  updateImages(val) {
+    const imagesIndex = this.state.imagesIndex;
+    const amountPerView = this.state.amountPerView;
     switch (val) {
       case START: {
-        this.setState({ page: this.state.page === 0 ? this.state.page : this.state.page - 1 });
+        this.setState({
+          imagesIndex: imagesIndex === 1 ? imagesIndex : imagesIndex - amountPerView,
+        });
         break;
       }
       case END: {
-        this.setState({ page: this.state.page + 1 });
+        this.setState({ imagesIndex: imagesIndex + this.state.amountPerView });
         break;
       }
       default: {
-        this.setState({ page: this.state.page });
+        this.setState({ imagesIndex });
+      }
+    }
+  }
+  updatePagination(val) {
+    const page = this.state.page;
+    switch (val) {
+      case START: {
+        this.setState({ page: page === 0 ? page : page - 1 });
+        break;
+      }
+      case END: {
+        this.setState({ page: page + 1 });
+        break;
+      }
+      default: {
+        this.setState({ page });
       }
     }
     setTimeout(() => {
@@ -43,7 +64,7 @@ export default class App extends React.Component {
   search(e) {
     const val = e.target.value;
     if (e.target.value !== '') {
-      const queryValue = `AND ${val.replace(/( )([A-Za-z])/g, '$1AND $2')}`;
+      const queryValue = `AND ${val.replace(/( )([A-Za-z])/g, '$1OR $2')}`;
       this.setState({ query: queryValue });
     } else {
       this.setState({ query: val });
@@ -57,7 +78,9 @@ export default class App extends React.Component {
       return <div>Loading...</div>;
     }
     const rows = [];
-    for (let i = 0; i <= 8; i += 1) {
+    const imagesIndex = this.state.imagesIndex;
+    const amountPerView = this.state.amountPerView;
+    for (let i = imagesIndex - 1; i <= imagesIndex + amountPerView; i += 1) {
       const item = this.state.data[i];
       if (item === undefined) {
         break;
@@ -69,6 +92,9 @@ export default class App extends React.Component {
         <button onClick={() => this.updatePagination(START)}>Prev</button>
         <button onClick={() => this.updatePagination(END)}>Next</button>
         <span>{this.state.page}</span>
+        <button onClick={() => this.updateImages(START)}>Prev</button>
+        <button onClick={() => this.updateImages(END)}>Next</button>
+        <span>{imagesIndex} - {(imagesIndex + amountPerView) - 1}</span>
         <div>
           <label htmlFor="search">Search</label>
           <input id="search" type="text" value={this.state.value} onChange={this.search} />

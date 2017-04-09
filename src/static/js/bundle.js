@@ -9192,7 +9192,8 @@ var App = function (_React$Component) {
     _this.getData = _this.getData.bind(_this);
     _this.search = _this.search.bind(_this);
     _this.updatePagination = _this.updatePagination.bind(_this);
-    _this.state = { data: [], page: 0, tags: 'polandball', query: '' };
+    _this.updateImages = _this.updateImages.bind(_this);
+    _this.state = { data: [], page: 0, imagesIndex: 1, amountPerView: 8, tags: 'polandball', query: '' };
     return _this;
   }
 
@@ -9212,24 +9213,49 @@ var App = function (_React$Component) {
       });
     }
   }, {
-    key: 'updatePagination',
-    value: function updatePagination(val) {
-      var _this3 = this;
-
+    key: 'updateImages',
+    value: function updateImages(val) {
+      var imagesIndex = this.state.imagesIndex;
+      var amountPerView = this.state.amountPerView;
       switch (val) {
         case START:
           {
-            this.setState({ page: this.state.page === 0 ? this.state.page : this.state.page - 1 });
+            this.setState({
+              imagesIndex: imagesIndex === 1 ? imagesIndex : imagesIndex - amountPerView
+            });
             break;
           }
         case END:
           {
-            this.setState({ page: this.state.page + 1 });
+            this.setState({ imagesIndex: imagesIndex + this.state.amountPerView });
             break;
           }
         default:
           {
-            this.setState({ page: this.state.page });
+            this.setState({ imagesIndex: imagesIndex });
+          }
+      }
+    }
+  }, {
+    key: 'updatePagination',
+    value: function updatePagination(val) {
+      var _this3 = this;
+
+      var page = this.state.page;
+      switch (val) {
+        case START:
+          {
+            this.setState({ page: page === 0 ? page : page - 1 });
+            break;
+          }
+        case END:
+          {
+            this.setState({ page: page + 1 });
+            break;
+          }
+        default:
+          {
+            this.setState({ page: page });
           }
       }
       setTimeout(function () {
@@ -9243,7 +9269,7 @@ var App = function (_React$Component) {
 
       var val = e.target.value;
       if (e.target.value !== '') {
-        var queryValue = 'AND ' + val.replace(/( )([A-Za-z])/g, '$1AND $2');
+        var queryValue = 'AND ' + val.replace(/( )([A-Za-z])/g, '$1OR $2');
         this.setState({ query: queryValue });
       } else {
         this.setState({ query: val });
@@ -9265,7 +9291,9 @@ var App = function (_React$Component) {
         );
       }
       var rows = [];
-      for (var i = 0; i <= 8; i += 1) {
+      var imagesIndex = this.state.imagesIndex;
+      var amountPerView = this.state.amountPerView;
+      for (var i = imagesIndex - 1; i <= imagesIndex + amountPerView; i += 1) {
         var item = this.state.data[i];
         if (item === undefined) {
           break;
@@ -9293,6 +9321,27 @@ var App = function (_React$Component) {
           'span',
           null,
           this.state.page
+        ),
+        _react2.default.createElement(
+          'button',
+          { onClick: function onClick() {
+              return _this5.updateImages(START);
+            } },
+          'Prev'
+        ),
+        _react2.default.createElement(
+          'button',
+          { onClick: function onClick() {
+              return _this5.updateImages(END);
+            } },
+          'Next'
+        ),
+        _react2.default.createElement(
+          'span',
+          null,
+          imagesIndex,
+          ' - ',
+          imagesIndex + amountPerView - 1
         ),
         _react2.default.createElement(
           'div',
