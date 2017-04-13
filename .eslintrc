@@ -7,6 +7,11 @@
     "XMLHttpRequest": true
 	},
   "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalDecorators": true
+    }
+  },
   "extends": "airbnb",
   "rules": {
     "func-names": ["error", "never"],

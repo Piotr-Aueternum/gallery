@@ -1,0 +1,25 @@
+.imagesList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+.imageListItem {
+  list-style: none;
+  background-color: #ddd;
+  width: 100%;
+  max-width: 800px;
+}
+.imageListInfo {
+  padding: 15px;
+}
+.imageListHeading {
+  margin: 5px 0;
+}
+.image {
+  box-shadow: 0 0 1px rgba(0,0,0,0.3);
+  max-width: 800px;
+  width: 100%;
+  display: block;
+}
