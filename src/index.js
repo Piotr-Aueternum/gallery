@@ -6,10 +6,7 @@ import { createStore, applyMiddleware } from 'redux';
 import App from './components/App';
 import changePage from './reducers';
 
-let middleware = applyMiddleware();
-if (process.env.DEVELOPMENT) {
-  middleware = applyMiddleware(logger);
-}
+const middleware = process.env.DEVELOPMENT ? applyMiddleware(logger) : undefined;
 const store = createStore(changePage, middleware);
 
 window.addEventListener('load', () => {

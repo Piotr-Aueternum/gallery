@@ -17,9 +17,8 @@ module.exports = {
     },
     {
       test: /\.js$/,
-      use: [{
-        loader: 'babel-loader',
-      },
+      use: [
+        'babel-loader',
         'eslint-loader',
       ],
     }],
@@ -31,15 +30,14 @@ module.exports = {
     hot: true,
     contentBase: 'src/static',
     historyApiFallback: true,
-
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify('production')
-      }
+        NODE_ENV: JSON.stringify('production'),
+      },
     }),
-    new webpack.optimize.UglifyJsPlugin()
+    new webpack.optimize.UglifyJsPlugin(),
   ],
 };
 

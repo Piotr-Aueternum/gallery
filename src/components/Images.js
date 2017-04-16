@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styles from './Images.css';
 import httpGet from '../httpGet';
@@ -12,15 +13,15 @@ import { setData, setPage, setQuery } from '../actions';
   data_query: state.data.data_query,
   pagination: state.page.pagination,
 }))
-export default class Images extends React.Component {
+export default class extends React.Component {
   static propTypes = {
-    page: React.PropTypes.number,
-    pagination: React.PropTypes.number,
-    amount: React.PropTypes.number,
-    data_query: React.PropTypes.string,
-    query: React.PropTypes.string,
-    data: React.PropTypes.arrayOf,
-    dispatch: React.PropTypes.func,
+    page: PropTypes.number,
+    pagination: PropTypes.number,
+    amount: PropTypes.number,
+    data_query: PropTypes.string,
+    query: PropTypes.string,
+    data: PropTypes.arrayOf,
+    dispatch: PropTypes.func,
   }
   static defaultProps = {
     page: 0,
@@ -49,11 +50,11 @@ export default class Images extends React.Component {
       const amount = this.props.amount;
       const loadBoundary = this.props.pagination * amount;
       const exceededBoundary = this.props.data.length - loadBoundary < amount;
-      const emptyStoreData = this.props.data && this.props.data.length === 0;
-      if (data.length === 0) {
+      const emptyStoreData = this.props.data && !this.props.data.length;
+      if (!data.length) {
         this.props.dispatch(setQuery(''));
       }
-      if ((exceededBoundary || emptyStoreData) && data.length !== 0) {
+      if ((exceededBoundary || emptyStoreData) && Boolean(data.length)) {
         this.props.dispatch(setData('ADD_DATA', data));
       }
       if (this.props.data_query !== this.props.query) {
@@ -64,7 +65,7 @@ export default class Images extends React.Component {
     });
   }
   render() {
-    if (this.props.data && this.props.data.length === 0) {
+    if (this.props.data && !this.props.data.length) {
       return <div>Loading...</div>;
     }
     const rows = [];
@@ -86,7 +87,13 @@ export default class Images extends React.Component {
               <div>Comments: {item.comment_count}</div>
               <div>Author: {item.account_url}</div>
             </div>
-            <img className={styles.image} src={item.link} alt={item.title} />
+            <img
+              className={styles.image}
+              width={item.width}
+              height={item.height}
+              src={item.link}
+              alt={item.title}
+            />
           </li>,
         )
       }</ul>

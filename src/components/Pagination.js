@@ -1,12 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setPage } from '../actions';
 
-@connect(() => ({
-}))
-export default class Pagination extends React.Component {
+@connect() export default class extends React.Component {
   static propTypes = {
-    dispatch: React.PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    resetScroll: PropTypes.bool,
+    onPrev: PropTypes.string.isRequired,
+    onNext: PropTypes.string.isRequired,
+    prevName: PropTypes.node,
+    nextName: PropTypes.node,
+  }
+  static defaultProps = {
+    resetScroll: false,
+    prevName: 'Prev',
+    nextName: 'Next',
   }
   constructor(props) {
     super(props);
@@ -14,13 +23,15 @@ export default class Pagination extends React.Component {
   }
   updatePage(val) {
     this.props.dispatch(setPage(val));
-    window.scrollTo(0, 0);
+    if (this.props.resetScroll) {
+      window.scrollTo(0, 0);
+    }
   }
   render() {
     return (
       <div>
-        <button onClick={() => (this.updatePage('PREV_PAGINATION'))}>Prev</button>
-        <button onClick={() => (this.updatePage('NEXT_PAGINATION'))}>Next</button>
+        <button onClick={() => (this.updatePage(this.props.onPrev))}>{this.props.prevName}</button>
+        <button onClick={() => (this.updatePage(this.props.onNext))}>{this.props.nextName}</button>
       </div>
     );
   }

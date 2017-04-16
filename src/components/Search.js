@@ -1,17 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { setQuery, setValue } from '../actions';
 
 @connect(state => ({
   query: state.query.query,
 }))
-export default class Search extends React.Component {
+export default class extends React.Component {
   static propTypes = {
-    query: React.PropTypes.number,
-    dispatch: React.PropTypes.func.isRequired,
-  }
-  static defaultProps = {
-    query: '',
+    query: PropTypes.string.isRequired,
+    dispatch: PropTypes.func.isRequired,
   }
   constructor(props) {
     super(props);
