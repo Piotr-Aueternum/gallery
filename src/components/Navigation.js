@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import styles from './Navigation.css';
 import Pagination from './Pagination';
 import Search from './Search';
+import { setPage } from '../actions';
 
 @connect(state => ({
   amount: state.page.amount,
@@ -26,6 +27,7 @@ export default class extends React.Component {
         <nav className={styles.headerNav}>
           <Search id="search" />
           <Pagination
+            action={setPage}
             onPrev="PREV_PAGINATION"
             onNext="NEXT_PAGINATION"
             resetScroll

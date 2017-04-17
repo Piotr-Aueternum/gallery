@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { setPage } from '../actions';
 
 @connect() export default class extends React.Component {
   static propTypes = {
@@ -11,6 +10,7 @@ import { setPage } from '../actions';
     onNext: PropTypes.string.isRequired,
     prevName: PropTypes.node,
     nextName: PropTypes.node,
+    action: PropTypes.func.isRequired,
   }
   static defaultProps = {
     resetScroll: false,
@@ -22,7 +22,7 @@ import { setPage } from '../actions';
     this.updatePage = this.updatePage.bind(this);
   }
   updatePage(val) {
-    this.props.dispatch(setPage(val));
+    this.props.dispatch(this.props.action(val));
     if (this.props.resetScroll) {
       window.scrollTo(0, 0);
     }

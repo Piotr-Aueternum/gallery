@@ -1,16 +1,14 @@
 .header {
   position: fixed;
   bottom: 0;
-  left: 0;
-  width: 100%;
   background-color: #eee;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 60px;
   box-shadow: 0 0 1px #333;
   z-index: 10;
+  padding: 10px;
 }
 
 .headerNav {
