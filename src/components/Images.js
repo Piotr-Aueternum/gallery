@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import styles from './Images.css';
 import httpGet from '../httpGet';
 import { setData, setPage, setQuery } from '../actions';
@@ -15,22 +16,18 @@ import { setData, setPage, setQuery } from '../actions';
 }))
 export default class extends React.Component {
   static propTypes = {
-    page: PropTypes.number,
-    pagination: PropTypes.number,
-    amount: PropTypes.number,
+    page: PropTypes.number.isRequired,
+    pagination: PropTypes.number.isRequired,
+    amount: PropTypes.number.isRequired,
     data_query: PropTypes.string,
     query: PropTypes.string,
     data: PropTypes.arrayOf,
-    dispatch: PropTypes.func,
+    dispatch: PropTypes.func.isRequired,
   }
   static defaultProps = {
-    page: 0,
-    pagination: 1,
-    amount: 8,
     data_query: '',
     query: '',
     data: [],
-    dispatch: () => {},
   }
   constructor(props) {
     super(props);
@@ -45,27 +42,28 @@ export default class extends React.Component {
     });
   }
   getData() {
-    httpGet(`https://api.imgur.com/3/gallery/search/${this.props.page}?q=polandball ${this.props.query}&q_type=png`, (res) => {
-      const data = JSON.parse(res).data;
-      const amount = this.props.amount;
-      const loadBoundary = this.props.pagination * amount;
-      const exceededBoundary = this.props.data.length - loadBoundary < amount;
-      const emptyStoreData = this.props.data && !this.props.data.length;
-      if (!data.length) {
-        this.props.dispatch(setQuery(''));
-      }
-      if ((exceededBoundary || emptyStoreData) && Boolean(data.length)) {
-        this.props.dispatch(setData('ADD_DATA', data));
-      }
-      if (this.props.data_query !== this.props.query) {
-        this.props.dispatch(setData('ADD_QUERY', this.props.query));
-        this.props.dispatch(setData('UPDATE_DATA', data));
-        this.props.dispatch(setPage('RESET_PAGINATION'));
-      }
-    });
+    httpGet(`https://api.imgur.com/3/gallery/search/${this.props.page}?q=polandball ${this.props.query}&q_type=png`)
+      .then((res) => {
+        const data = JSON.parse(res).data;
+        const amount = this.props.amount;
+        const loadBoundary = this.props.pagination * amount;
+        const exceededBoundary = this.props.data.length - loadBoundary < amount;
+        const emptyStoreData = this.props.data && !this.props.data.length;
+        if (!data.length) {
+          this.props.dispatch(setQuery(''));
+        }
+        if ((exceededBoundary || emptyStoreData) && Boolean(data.length)) {
+          this.props.dispatch(setData('ADD_DATA', data));
+        }
+        if (this.props.data_query !== this.props.query) {
+          this.props.dispatch(setData('ADD_QUERY', this.props.query));
+          this.props.dispatch(setData('UPDATE_DATA', data));
+          this.props.dispatch(setPage('RESET_PAGINATION'));
+        }
+      });
   }
   render() {
-    if (this.props.data && !this.props.data.length) {
+    if (this.props.data && this.props.data.length === 0) {
       return <div>Loading...</div>;
     }
     const rows = [];
@@ -84,7 +82,7 @@ export default class extends React.Component {
           <li className={styles.imageListItem}>
             <div className={styles.imageListInfo}>
               <h2 className={styles.imageListHeading}>{item.title}</h2>
-              <div>Comments: {item.comment_count}</div>
+              <Link to={`image/${item.id}`}>Comments: {item.comment_count}</Link>
               <div>Author: {item.account_url}</div>
             </div>
             <img

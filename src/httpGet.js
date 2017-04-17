@@ -1,12 +1,12 @@
-export default (theUrl, callback) => {
+export default theUrl => new Promise((resolve) => {
   const request = new XMLHttpRequest();
-  request.onreadystatechange = () => {
+  request.addEventListener('load', () => {
     if (request.readyState === 4 && request.status === 200) {
-      callback(request.responseText);
+      resolve(request.responseText);
     }
-  };
+  });
   request.open('GET', theUrl, true);
   request.setRequestHeader('Authorization', 'Client-ID 33d4059b86ff060');
   request.send(null);
-};
+});
 
