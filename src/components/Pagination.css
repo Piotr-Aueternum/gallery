@@ -1,0 +1,14 @@
+.pagination {
+  display: flex;
+}
+
+.link {
+  margin: 0 5px;
+  margin-right: 0;
+  display: block;
+}
+
+.disabled {
+  color: #777;
+  pointer-events: none;
+}

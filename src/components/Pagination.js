@@ -11,11 +11,13 @@ import { connect } from 'react-redux';
     prevName: PropTypes.node,
     nextName: PropTypes.node,
     action: PropTypes.func.isRequired,
+    className: PropTypes.string,
   }
   static defaultProps = {
     resetScroll: false,
     prevName: 'Prev',
     nextName: 'Next',
+    className: '',
   }
   constructor(props) {
     super(props);
@@ -29,7 +31,7 @@ import { connect } from 'react-redux';
   }
   render() {
     return (
-      <div>
+      <div className={this.props.className}>
         <button onClick={() => (this.updatePage(this.props.onPrev))}>{this.props.prevName}</button>
         <button onClick={() => (this.updatePage(this.props.onNext))}>{this.props.nextName}</button>
       </div>

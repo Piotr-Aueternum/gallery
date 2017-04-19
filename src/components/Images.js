@@ -42,23 +42,25 @@ export default class extends React.Component {
     });
   }
   getData() {
-    httpGet(`https://api.imgur.com/3/gallery/search/${this.props.page}?q=polandball ${this.props.query}&q_type=png`)
+    httpGet(`https://api.imgur.com/3/gallery/search/${this.props.page}?q=polandball&q_type=png`)
       .then((res) => {
         const data = JSON.parse(res).data;
         const amount = this.props.amount;
         const loadBoundary = this.props.pagination * amount;
         const exceededBoundary = this.props.data.length - loadBoundary < amount;
         const emptyStoreData = this.props.data && !this.props.data.length;
-        if (!data.length) {
+        if (data.length === 0) {
           this.props.dispatch(setQuery(''));
         }
         if ((exceededBoundary || emptyStoreData) && Boolean(data.length)) {
           this.props.dispatch(setData('ADD_DATA', data));
+          this.props.dispatch(setPage('NEXT_PAGE'));
         }
         if (this.props.data_query !== this.props.query) {
           this.props.dispatch(setData('ADD_QUERY', this.props.query));
           this.props.dispatch(setData('UPDATE_DATA', data));
           this.props.dispatch(setPage('RESET_PAGINATION'));
+          this.props.dispatch(setPage('RESET_PAGE'));
         }
       });
   }
