@@ -21,7 +21,7 @@ export default class extends React.Component {
     e.preventDefault();
     const val = this.props.val;
     if (val !== '') {
-      const queryValue = ` AND ${val.replace(/( )([a-z])/ig, '$1OR $2')}`;
+      const queryValue = ` AND ${val.split(' ').join(' OR ')}`;
       this.props.dispatch(setQuery(queryValue));
     } else {
       this.props.dispatch(setQuery(val));

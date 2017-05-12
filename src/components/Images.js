@@ -26,7 +26,7 @@ export default class extends React.Component {
     dispatch: PropTypes.func,
   }
   static defaultProps = {
-    page: 1,
+    page: 0,
     amount: 0,
     pagination: 0,
     data_query: '',

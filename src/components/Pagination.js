@@ -33,8 +33,8 @@ import { connect } from 'react-redux';
   render() {
     return (
       <div className={this.props.className}>
-        <button onClick={() => (this.updatePage(this.props.onPrev))}>{this.props.prevName}</button>
-        <button onClick={() => (this.updatePage(this.props.onNext))}>{this.props.nextName}</button>
+        <button onClick={() => this.updatePage(this.props.onPrev)}>{this.props.prevName}</button>
+        <button onClick={() => this.updatePage(this.props.onNext)}>{this.props.nextName}</button>
       </div>
     );
   }
