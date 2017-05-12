@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import Images from './Images';
 import Navigation from './Navigation';
 import Pagination from './Pagination';
@@ -20,14 +21,14 @@ export default class extends React.Component {
     pagination: 1,
     amount: 8,
   }
-  componentDidMount() {
-    document.title = 'Gallery';
-  }
   render() {
     const minRange = ((this.props.pagination * this.props.amount) - this.props.amount) + 1;
     const maxRange = (this.props.pagination * this.props.amount);
     return (
       <div>
+        <Helmet>
+          <title>Gallery</title>
+        </Helmet>
         <Navigation>
           <div className={styles.searchbar}>
             <Pagination

@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 import styles from './Image.css';
-import httpGet from '../httpGet';
+import Comments from './Comments';
+import apiClient from '../api_client';
+import * as imgur from '../constants/imgur_api';
 
 export default class Image extends React.Component {
   static propTypes = {
     params: PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
     }).isRequired,
-    children: PropTypes.node.isRequired,
   }
   constructor(props) {
     super(props);
@@ -21,47 +23,35 @@ export default class Image extends React.Component {
     this.getData();
   }
   getData() {
-    httpGet(`https://api.imgur.com/3/gallery/image/${this.props.params.id}/comments`)
-      .then((res) => {
-        const data = JSON.parse(res).data;
-        this.setState({ data });
-      });
-    httpGet(`https://api.imgur.com/3/image/${this.props.params.id}`)
-      .then((res) => {
-        const image = JSON.parse(res).data;
-        this.setState({ image });
-      });
+    apiClient.init({
+      address: imgur.url,
+      token: imgur.token,
+      pathname: `/3/gallery/image/${this.props.params.id}/comments`,
+    }).then((res) => {
+      const data = res.data;
+      this.setState({ data });
+    });
+    apiClient.init({
+      address: imgur.url,
+      token: imgur.token,
+      pathname: `/3/image/${this.props.params.id}`,
+    }).then((res) => {
+      const image = res.data;
+      this.setState({ image });
+    });
   }
   render() {
     if (typeof this.state.image.link !== 'string') {
       return <div>Loading...</div>;
     }
-    function comments(data) {
-      return (
-        <ul className={styles.comments}>
-          {data.map(
-            item => (
-              <li className={styles.commentsItem}>
-                <div className={styles.message}>
-                  <div><b>{item.author}</b> {item.ups - item.downs}pts</div>
-                  <div className={styles.comment}>{item.comment}</div>
-                </div>
-                <div className={styles.replies}>{
-                  (item.children && Boolean(item.children.length))
-                  && comments(item.children)
-                }</div>
-              </li>
-            ),
-          )}
-        </ul>
-      );
-    }
     return (
       <div>
+        <Helmet>
+          <title>Image</title>
+        </Helmet>
         <h1>{this.state.image.title || 'Untitled'}</h1>
         <img className={styles.image} src={this.state.image.link} alt="" />
-        {this.props.children}
-        {comments(this.state.data)}
+        <Comments data={this.state.data} />
       </div>
     );
   }

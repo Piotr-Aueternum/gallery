@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 @connect() export default class extends React.Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func,
     resetScroll: PropTypes.bool,
     onPrev: PropTypes.string.isRequired,
     onNext: PropTypes.string.isRequired,
@@ -18,6 +18,7 @@ import { connect } from 'react-redux';
     prevName: 'Prev',
     nextName: 'Next',
     className: '',
+    dispatch: () => {},
   }
   constructor(props) {
     super(props);
