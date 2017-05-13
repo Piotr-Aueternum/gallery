@@ -1,12 +1,9 @@
-export default (url, token) => new Promise((resolve) => {
-  const request = new XMLHttpRequest();
-  request.addEventListener('load', () => {
-    if (request.readyState === 4 && request.status === 200) {
-      resolve(request.responseText);
-    }
-  });
-  request.open('GET', url, true);
-  request.setRequestHeader('Authorization', token);
-  request.send(null);
+export default (url, headers = {}) => new Promise((resolve) => {
+  fetch(url, {
+    method: 'get',
+    headers,
+  })
+  .then(response => response.json())
+  .then(data => resolve(data));
 });
 
