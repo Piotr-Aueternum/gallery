@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styles from './Image.css';
+import styles from './Comments.css';
 import Comment from './Comment';
 
 export default class Comments extends React.Component {
