@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import styles from './Images.css';
 import apiClient from '../api_client';
 import { setData, setPage, setQuery } from '../actions';
-import * as imgur from '../constants/imgur_api';
+import * as imgur from '../constans/imgur_api';
 
 @connect(state => ({
   page: state.page.page,

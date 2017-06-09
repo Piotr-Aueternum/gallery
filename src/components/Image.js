@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import styles from './Image.css';
 import Comments from './Comments';
 import apiClient from '../api_client';
-import * as imgur from '../constants/imgur_api';
+import * as imgur from '../constans/imgur_api';
 
 export default class Image extends React.Component {
   static propTypes = {
