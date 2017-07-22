@@ -4,10 +4,9 @@ export default {
   init: ({ address, pathname = '', query = [], token }) => new Promise((resolve) => {
     const url = new window.URL(address);
     url.pathname = pathname;
-    const search = [];
-    Object.keys(query).forEach((key) => {
-      search.push(`${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`);
-    });
+    const encode = encodeURIComponent;
+    const createQuery = (arr, key) => [...arr, `${encode(key)}=${encode(query[key])}`];
+    const search = Object.keys(query).reduce(createQuery, []);
     url.search = search.join('&');
     httpGet(url, {
       Authorization: token,
